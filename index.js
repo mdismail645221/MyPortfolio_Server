@@ -41,11 +41,11 @@ const sendEmail = (emailData) => {
 
     const mailOptions = {
         from: emailData?.email,
-        to: process.env.EMAIL_PASSWORD,
+        to: process.env.EMAIL,
         subject: emailData?.subject,
         html: `
-        <p style{{fontWeight: 'bold', fontSize: '18px'}}>Contact user Name ${emailData.name}</p>
-        <p style{{backgroundColor: '#ddd'}}>${emailData.message}</p>
+        <p>Contact user Name ${emailData.name}</p>
+        <p>${emailData.message}</p>
         `
     };
 
