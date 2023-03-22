@@ -29,7 +29,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 // sending email
 const sendEmail = (emailData) => {
-    console.log("emailData", emailData)
+    // console.log("emailData", emailData)'
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -63,6 +63,7 @@ const sendEmail = (emailData) => {
 async function run() {
     try {
         const projectsCollection = client.db("MyPortFolio").collection("myProjects");
+        const clientMessageCollection = client.db("MyPortFolio").collection("clientMessage");
 
 
         app.get('/projects', async (req, res) => {
@@ -80,15 +81,29 @@ async function run() {
 
         })
 
-        app.post('/projects', (req, res) => {
+        app.post('/projects', async(req, res) => {
             const { name, email, message } = req.body;
             // console.log(body)
-            sendEmail({
-                message: message,
-                name,
-                email,
-                subject: "CONTACT OF PORTFOLIO CLIENT"
-            },)
+            const result = await clientMessageCollection.insertOne(req.body)
+            if(result){
+                res.send({
+                    success: true,
+                    data: result
+                })
+                sendEmail({
+                    message: message,
+                    name,
+                    email,
+                    subject: "CONTACT OF PORTFOLIO CLIENT"
+                })
+            }else{
+                res.send({
+                    success: false,
+                    message: "no found data. please another try now"
+                })
+                return;
+            }
+           
         })
 
 
