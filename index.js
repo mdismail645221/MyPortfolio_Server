@@ -34,17 +34,17 @@ const sendEmail = (emailData) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: `${process.env.EMAIL}`,
+            user: process.env.EMAIL,
             pass: process.env.EMAIL_PASSWORD
         }
     });
 
     const mailOptions = {
         from: emailData?.email,
-        to: 'mdismail645221@gmail.com',
+        to: process.env.EMAIL_PASSWORD,
         subject: emailData?.subject,
         html: `
-        <p>Contact user Name ${emailData.name}</p>
+        <p style{{fontWeight: 'bold', fontSize: '18px'}}>Contact user Name ${emailData.name}</p>
         <p style{{backgroundColor: '#ddd'}}>${emailData.message}</p>
         `
     };
